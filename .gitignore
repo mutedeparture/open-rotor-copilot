@@ -1,0 +1,7 @@
+*.ipynb
+.venv
+__pycache__
+.eggs
+output
+checkpoints
+input
