@@ -6,8 +6,10 @@
 
 <p align="center">
   <strong>AI-powered issue detection for FPV flight logs</strong><br/>
-  Learn from flights. Parse telemetry. Find what went wrong.
+  Learn from flights. Parse telemetry. Find what went wrong. <br />
+  <a href="https://huggingface.co/spaces/rbarac/open-rotor-copilot">🤗 Hugging Face Showcase</a>
 </p>
+
 
 ---
 
