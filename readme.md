@@ -50,6 +50,36 @@ This module takes **structured telemetry** (parsed from `.bbl` logs) and feeds i
 
 ---
 
+## Issues Detected & Explained
+
+Open Rotor Copilot is designed to detect and explain the following common multirotor (FPV/drone) flight issues from Blackbox log data:
+
+| **Issue Name**           | **Short Description**                                 |
+| ------------------------ | ----------------------------------------------------- |
+| **prop\_wash**           | Excessive prop wash, usually at high throttle         |
+| **motor\_desync**        | Motor outputs diverge due to electrical desync        |
+| **motor\_stall**         | Motor output too low for sustained period             |
+| **flip**                 | Sudden/unnatural roll or pitch flip detected          |
+| **excessive\_vibration** | Gyro sensor sees abnormal vibration                   |
+| **pid\_saturation**      | PID loop output saturates, can’t stabilize craft      |
+| **mixer\_saturation**    | Mixer hits max/min output, control authority loss     |
+| **frame\_resonance**     | Frame or propeller mechanical resonance in gyro data  |
+| **prop\_damage**         | Motor output imbalance hints at damaged prop(s)       |
+| **attitude\_change**     | Rapid orientation/attitude change detected            |
+| **battery\_sag**         | Battery voltage drops under high load                 |
+| **brownout**             | Voltage drops dangerously low, risking shutdown       |
+| **current\_draw**        | Excessive current draw detected                       |
+| **rssi\_drop**           | Radio link signal drops below safe levels             |
+| **rc\_loss**             | RC (remote control) link lost or fails                |
+| **rc\_jitter**           | Sudden/unusual RC input changes (spikes, noise)       |
+| **gps\_loss**            | GPS satellite loss or outage detected                 |
+| **accel\_drift**         | Acceleration sensor drifts from normal expected value |
+| **alt\_sensor**          | Sudden/erratic baro/GPS altitude readings             |
+| **heading\_jump**        | Heading (compass/yaw) sudden/unexpected jump          |
+| **crash**                | Sudden impact or motor drop indicating possible crash |
+| **no\_issue**            | No anomaly or problem detected                        |
+
+
 ## Inference
 
 ```bash
