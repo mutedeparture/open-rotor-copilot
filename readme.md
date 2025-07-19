@@ -91,10 +91,8 @@ pip install datasets transformers
 ```python
 from transformers import pipeline
 
-# Load from Hugging Face model repo (after you train & push!)
 pipe = pipeline("text2text-generation", model="rbarac/open-rotor-copilot")
 
-# Example input string (from dataset)
 test_input = "avg gyro_std = 32.8, motors_min = 15.8, vbat_drop = 0.91, ... (all your features)"
 prompt = f"Flight log: {test_input}\nExplain:"
 
