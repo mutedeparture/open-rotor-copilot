@@ -11,71 +11,64 @@
 
 ---
 
-## ✨ What is this?
+## What is this?
 
-**Open Rotor Copilot AI** is the brain of your drone's Copilot.  
-It uses **language models (LLMs)** to analyze parsed Betaflight log data — identifying issues like:
+**Open Rotor Copilot AI** is an open-source LLM-driven project focused on interpreting drone telemetry, assisting with diagnostics, and providing actionable insights for both pilots and developers.
 
-- 🌀 Prop wash
-- 🚨 Bad PID tuning or I-term windup
-- 🛰️ GPS lock loss or unsafe RTH
-- 🔋 Voltage sags and current spikes
-- 🧭 Yaw drift or gyro instability
+- Flight Log Analysis: Input drone logs (Betaflight Blackbox and similar), receive instant, natural language feedback on issues and flight performance.
 
-Whether you're flying freestyle, racing, or mapping, Copilot helps you **learn from your flight behavior automatically**.
+- Feature-rich: Supports a wide set of aggregated features including gyro statistics, RC command metrics, voltage behavior, motor outputs, GPS, RSSI, accelerometer patterns, and more.
 
----
+- Windowed Reasoning: Breaks logs into time windows, analyzes events in context, and describes conditions using human-friendly language.
 
-## 🧠 How It Works
+- Compositional Explanations: For each window, outputs a concise, context-aware reason describing any detected issue or anomaly.
 
-This module takes **structured telemetry** (parsed from `.bbl` logs) and feeds it into a **locally trained LLM** to detect flight issues.
+- Flexible, Extensible: Built for integration into other open drone ecosystems or research workflows.
 
-You control the:
-- 💾 Input format (CSV or JSON from parser)
-- 🏷️ Labeled data for training
-- 🔍 Inference backend (e.g. Hugging Face, local transformers)
 
 ---
 
-## 📥 Input Format (Example)
+## How It Works
 
-Each flight log is parsed to rows like:
+This module takes **structured telemetry** (parsed from `.bbl` logs) and feeds it into a **locally trained LLM** to detect flight issues. For each segment, receive an explanation such as:
 
-```csv
-"loopIteration","time","axisP[0]","axisP[1]","axisP[2]","axisI[0]",...,"gpsDistance","gpsHomeAzimuth"
-0,173075191,0,1,0,0,0,0,-1,0,...,0.0,0.0
-4,173076431,0,1,0,0,0,0,-1,1,...,1.73e-10,340.2
+```bash
+"Excessive vibration (gyro_std=123.56); Battery voltage sagged (vbat_drop=0.91V); Motor difference high (motor_diff_max=49.18)"
 ```
 
-or
+## Features
 
-```json
-{
-  "header": {
-    "firmware": "Betaflight 4.5.1",
-    "board": "SPEEDYBEEF7V3",
-    "datetime": "2024-07-31T18:10:49Z",
-    "gps_rescue": true
-  },
-  "frames": [
-    { "time": 173075191, "axisP": [0,1,0], "motor": [348,348,...], "GPS_numSat": 8 },
-    ...
-  ]
-}
+- 🛠️ Compatible with Drone Logs: Parses and processes logs from real flights or simulations
+
+- 🧠 LLM-Friendly Inputs: Each window formatted as a descriptive string—ready for Hugging Face and other ML frameworks
+
+- 💬 Human-Centric Reasons: Outputs are concise and helpful, designed for pilots, engineers, and AI systems alike
+
+- 🔬 Advanced Feature Set: See below for the full list!
+
+- 🤗 Hugging Face Ready: Designed for easy use with Hugging Face datasets and transformers
+
+---
+
+## Inference
+
+```bash
+pip install datasets transformers
 ```
 
-## 🧠 Output
+### Using Fine-tune the Model
 
-```json
-[
-  "prop wash detected on descent",
-  "GPS rescue triggered with low satellite count",
-  "I-term windup during throttle oscillation",
-  "minor vibration on pitch axis during flip"
-]
+```python
+from transformers import pipeline
+
+# Load from Hugging Face model repo (after you train & push!)
+pipe = pipeline("text2text-generation", model="rbarac/open-rotor-copilot")
+
+# Example input string (from dataset)
+test_input = "avg gyro_std = 32.8, motors_min = 15.8, vbat_drop = 0.91, ... (all your features)"
+prompt = f"Flight log: {test_input}\nExplain:"
+
+result = pipe(prompt)
+print(result[0]['generated_text'])
 ```
 
-You can also configure outputs to include:
-- 🕓 Time ranges (when issue happened)
-- 🚦 Severity scores
-- 📍 GPS location (if available)

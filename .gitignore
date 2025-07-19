@@ -5,3 +5,7 @@ __pycache__
 output
 checkpoints
 input
+push.py
+env
+data
+m.csv
